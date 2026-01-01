@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Declaración de Amor Animada ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #000000; /* Negro profundo para el espacio */
+            --secondary-bg: #1a0732; /* Morado oscuro para bloques */
+            --accent-pink: #ffd27d; /* Rosa neón */
+            --accent-white: #f0f0f0;
+            --accent-cyan: #ffd27d; /* Cyan neón */
+            --text-color: #f0f0f0; /* Texto principal claro */
+            --heart-color: #ff3366; /* Rojo-rosa vibrante para el corazón */
+            --counter-numbers-color: #ffd700; /* Dorado para los números del contador */
+            
+            --font-pixel: 'Press Start 2P', cursive;
+            --font-main-message: 'VT323', monospace; 
+        }
+
+        /* 🌅 FONDO DE PUESTA DE SOL ANIMADO */
+body {
+    font-family: var(--font-main-message);
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* CENTRADO VERTICAL */
+    align-items: center;     /* CENTRADO HORIZONTAL */
+
+    background: linear-gradient(
+        180deg,
+        #ff8c42 0%,
+        #ff5f6d 35%,
+        #c850c0 65%,
+        #3a0a6a 100%
+    );
+    background-size: 100% 100%;
+    overflow: auto;
+    position: relative;
+}
+
+
+body::before {
+    content: "";
+    position: absolute;
+    bottom: -120px; /* lo baja */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(
+        circle,
+        #ffd27d 0%,
+        #ff9a3c 45%,
+        rgba(255, 154, 60, 0.4) 60%,
+        transparent 70%
+    );
+    border-radius: 50%;
+    filter: blur(2px); /* MUCHO MENOS DIFUMINADO */
+    opacity: 0.95;
+    z-index: -2;
+}
+
+
+body::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(255,255,255,0.04),
+        rgba(0,0,0,0.12)
+    );
+    z-index: -1;
+}
+
+.container {
+    margin: 0 auto;
+}
+
+
+/* Animaciones */
+@keyframes sunsetShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes cloudsMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50px); }
+}
+
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: stretch; 
+            gap: 30px;
+            width: 100%;
+            max-width: 950px; 
+            z-index: 1; /* Asegura que el contenido esté sobre el fondo */
+        }
+
+        .message-block { 
+            background-color: rgba(26, 7, 50, 0.85); /* Fondo con algo de transparencia */
+            padding: 30px; 
+            border-radius: 10px;
+            border: 2px solid var(--accent-cyan);
+            box-shadow: 0 0 10px var(--accent-cyan), 0 0 20px var(--accent-cyan) inset;
+            min-height: 280px; 
+            font-size: 1.3em; 
+            line-height: 1.8; 
+            white-space: pre-wrap;
+            flex: 1.2; 
+            min-width: 320px;
+            font-family: var(--font-main-message); 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            text-align: center; 
+            color: var(--accent-pink); 
+            text-shadow: 0 0 3px var(--accent-pink);
+        }
+
+        .heart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(26, 7, 50, 0.85); /* Fondo con algo de transparencia */
+            border-radius: 10px;
+            border: 2px solid var(--accent-pink); 
+            box-shadow: 0 0 10px var(--accent-pink), 0 0 20px var(--accent-pink) inset;
+            flex: 1;
+            min-width: 300px;
+            min-height: 280px; 
+            font-family: var(--font-pixel); 
+        }
+
+        .heart {
+            width: 100px;
+            height: 90px;
+            position: relative;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: opacity 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 25px;
+            filter: drop-shadow(0 0 8px var(--heart-color));
+            animation: pulse 1.5s infinite ease-in-out;
+            animation-play-state: paused; 
+        }
+
+        .heart.show {
+            opacity: 1;
+            transform: scale(1.1); 
+            animation-play-state: running; 
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1.1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .heart::before,
+        .heart::after {
+            content: "";
+            position: absolute;
+            left: 50px;
+            top: 0;
+            width: 50px;
+            height: 80px;
+            background: var(--heart-color);
+            border-radius: 50px 50px 0 0;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+
+        .heart::after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+
+        .heart-text {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.6s ease-in-out 0.4s, transform 0.6s ease-in-out 0.4s;
+            font-size: 0.7em; 
+            color: var(--text-color);
+            text-shadow: 0 0 5px var(--accent-pink);
+        }
+        
+        .heart-text.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .heart-text p {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        .heart-text .counter-line span {
+            display: inline-block;
+            min-width: 3ch; 
+            text-align: right;
+            color: var(--counter-numbers-color); 
+            font-weight: bold;
+            text-shadow: 0 0 3px var(--counter-numbers-color);
+        }
+        .heart-text .counter-line span#days {
+            min-width: 4ch; 
+        }
+
+
+        button#startButton {
+            font-family: var(--font-pixel);
+            background-color: transparent;
+            color: var(--accent-white);
+            border: 2px solid var(--accent-white);
+            padding: 15px 30px;
+            font-size: 0.8em; 
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 8px var(--accent-pink);
+            z-index: 1; /* Asegurar que el botón esté sobre el fondo */
+        }
+
+        button#startButton:hover:not(:disabled) {
+            background-color: var(--text-color);
+            color: var(--primary-bg);
+            box-shadow: 0 0 15px var(--accent-pink), 0 0 25px var(--accent-pink);
+        }
+        button#startButton:disabled {
+            border-color: #555;
+            color: #555;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .button2 {
+font-family: var(--font-pixel);
+            background-color: transparent;
+            color: var(--accent-white);
+            border: 2px solid var(--accent-white);
+            padding: 15px 30px;
+            font-size: 0.8em; 
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 8px var(--accent-pink);
+            z-index: 1; /* Asegurar que el botón esté sobre el fondo */
+        }
+
+        .button2:hover:not(:disabled) {
+            background-color: var(--text-color);
+            color: var(--primary-bg);
+            box-shadow: 0 0 15px var(--accent-pink), 0 0 25px var(--accent-pink);
+        }
+        .button2:disabled {
+            border-color: #555;
+            color: #555;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Los elementos ::before y ::after del body crearán el fondo galáctico -->
+<h1>Feliz Año nuevo mi conejita hermosa💖</h1>
+    <div class="container">
+        <div class="message-block" id="romanticMessageBlock">
+            <!-- El mensaje romántico se generará por JS -->
+        </div>
+
+        <div class="heart-container">
+            <div class="heart" id="animatedHeart"></div>
+            <div class="heart-text" id="heartTextContent">
+                <p id="line1"></p>
+                <p class="counter-line" id="line2">
+                    <span id="days">0</span> días, 
+                    <span id="hours">00</span> hs, 
+                    <span id="minutes">00</span> min, 
+                    <span id="seconds">00</span> seg
+                </p>
+                <p id="line3"></p>
+            </div>
+        </div>
+    </div>
+    <h3> Primero este 👇</h3>
+    <button id="startButton">Iniciar Declaración ❤️</button>
+    <br>
+    <h3> Despues este 👇</h3>
+    <button onclick="location.href='scaner.html'" type="button" class="button2"> Sorpresita :3</button>
+
+    <script>
+        // ----- ¡IMPORTANTE! PERSONALIZA ESTAS FRASES -----
+        const heartLine1 = "Tal vez no tengamos mucho pero me enamoré de ti hace...";
+        const heartLine3 = "Y cada dia me enamoro más de ti mi conejita hermosa💖"; 
+        
+        // ----- ¡IMPORTANTE! PERSONALIZA ESTA FRASE ROMÁNTICA -----
+        const romanticMessageLines = [
+            "Hola Conejita esta terminando este 2025 juntos, y iniciando este 2026 a tu lado ♥️,",
+            "Amo cada parte de ti en todo sentido y ni se hable de tus ojitos bellos, no tienes idea de como muero por ellos,",
+            "Solo quiero que estemos juntos para siempre :c prometo que te hare muy feliz, prometo amarte, procurarte y respetarte todos los días de mi vida",
+            "Aceptas? C:",
+            "Te amo con todo mi corazón 💖"
+        ];
+
+        // ----- ¡IMPORTANTE! CAMBIA ESTA FECHA -----
+        const loveStartDate = new Date(2025, 10, 17, 13, 51, 0); 
+
+        const romanticMessageElement = document.getElementById('romanticMessageBlock'); 
+        const heartElement = document.getElementById('animatedHeart');
+        const heartTextElement = document.getElementById('heartTextContent');
+        const line1Elem = document.getElementById('line1');
+        const line3Elem = document.getElementById('line3');
+        const daysElem = document.getElementById('days');
+        const hoursElem = document.getElementById('hours');
+        const minutesElem = document.getElementById('minutes');
+        const secondsElem = document.getElementById('seconds');
+        const startButton = document.getElementById('startButton');
+
+        let liveCounterInterval = null;
+
+        // Limpiar contenido inicial
+        romanticMessageElement.innerHTML = ''; 
+        line1Elem.innerHTML = '';
+        line3Elem.innerHTML = '';
+
+
+        function typeWriter(element, textLines, speed = 90) { 
+            return new Promise((resolve) => {
+                element.innerHTML = ''; 
+                let lineIndex = 0;
+                let charIndex = 0;
+                
+                function type() {
+                    if (lineIndex < textLines.length) {
+                        const currentLine = textLines[lineIndex];
+                        if (charIndex < currentLine.length) {
+                            element.innerHTML += currentLine.charAt(charIndex);
+                            charIndex++;
+                            setTimeout(type, speed);
+                        } else {
+                            if (lineIndex < textLines.length -1) {
+                                element.innerHTML += '<br><br>'; 
+                            }
+                            lineIndex++;
+                            charIndex = 0;
+                            setTimeout(type, speed * 4); 
+                        }
+                    } else {
+                        resolve(); 
+                    }
+                }
+                type();
+            });
+        }
+        
+        function countUpToInitial(element, target, duration = 1800, isPadded = false) {
+            return new Promise((resolve) => {
+                let current = 0;
+                const stepTime = 20; 
+                const totalSteps = duration / stepTime;
+                const increment = target === 0 ? 0 : target / totalSteps;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if ((increment >= 0 && current >= target) || (increment < 0 && current <= target) || target === 0) {
+                         current = target; 
+                         clearInterval(timer);
+                         resolve();
+                    }
+                    if (isPadded) { 
+                        element.textContent = String(Math.floor(current)).padStart(2, '0');
+                    } else { 
+                        element.textContent = Math.floor(current);
+                    }
+                }, stepTime);
+                 if (target === 0) { 
+                    if (isPadded) element.textContent = "00"; else element.textContent = "0";
+                    clearInterval(timer); 
+                    resolve();
+                }
+            });
+        }
+
+        function updateLiveCounters() {
+            const now = new Date();
+            let diff = now - loveStartDate; 
+
+            if (diff < 0) { 
+                daysElem.textContent = "0";
+                hoursElem.textContent = "00";
+                minutesElem.textContent = "00";
+                secondsElem.textContent = "00";
+                return;
+            }
+
+            let totalSeconds = Math.floor(diff / 1000);
+            let s = totalSeconds % 60;
+            let totalMinutes = Math.floor(totalSeconds / 60);
+            let m = totalMinutes % 60;
+            let totalHours = Math.floor(totalMinutes / 60);
+            let h = totalHours % 24;
+            let d = Math.floor(totalHours / 24);
+
+            daysElem.textContent = d;
+            hoursElem.textContent = String(h).padStart(2, '0');
+            minutesElem.textContent = String(m).padStart(2, '0');
+            secondsElem.textContent = String(s).padStart(2, '0');
+        }
+
+
+        async function startAnimation() {
+            startButton.disabled = true; 
+            if (liveCounterInterval) clearInterval(liveCounterInterval);
+
+            romanticMessageElement.innerHTML = ''; 
+            line1Elem.innerHTML = '';
+            line3Elem.innerHTML = '';
+            heartElement.classList.remove('show');
+            heartTextElement.classList.remove('show');
+            heartElement.style.animationPlayState = 'paused';
+
+            // 1. Animar el MENSAJE ROMÁNTICO
+            await typeWriter(romanticMessageElement, romanticMessageLines, 100); 
+
+            // 2. Mostrar el corazón y el texto del corazón
+            heartElement.classList.add('show');
+            heartElement.style.animationPlayState = 'running'; 
+            heartTextElement.classList.add('show');
+
+            // 3. Animar el primer texto del corazón
+            await typeWriter(line1Elem, [heartLine1], 70);
+
+            // 4. Animación inicial de "spin-up" para los contadores
+            const nowForInitialCount = new Date();
+            let initialDiff = nowForInitialCount - loveStartDate;
+            if (initialDiff < 0) initialDiff = 0;
+
+            let initialTotalSeconds = Math.floor(initialDiff / 1000);
+            let initialS = initialTotalSeconds % 60;
+            let initialTotalMinutes = Math.floor(initialTotalSeconds / 60);
+            let initialM = initialTotalMinutes % 60;
+            let initialTotalHours = Math.floor(initialTotalMinutes / 60);
+            let initialH = initialTotalHours % 24;
+            let initialD = Math.floor(initialTotalHours / 24);
+
+            daysElem.textContent = "0";
+            hoursElem.textContent = "00";
+            minutesElem.textContent = "00";
+            secondsElem.textContent = "00";
+
+            await Promise.all([
+                countUpToInitial(daysElem, initialD, 1800),
+                countUpToInitial(hoursElem, initialH, 1800, true),
+                countUpToInitial(minutesElem, initialM, 1800, true),
+                countUpToInitial(secondsElem, initialS, 1800, true)
+            ]);
+            
+            // 5. Iniciar el contador en tiempo real
+            updateLiveCounters(); 
+            liveCounterInterval = setInterval(updateLiveCounters, 1000);
+
+            // 6. Animar el último texto del corazón
+            await typeWriter(line3Elem, [heartLine3], 70);
+            
+            startButton.disabled = false; 
+            startButton.textContent = "Revivir Declaración ✨";
+        }
+
+        startButton.addEventListener('click', startAnimation);
+
+    </script>
+</body>
+</html>

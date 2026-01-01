@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz 2026! ✨</title>
+    <div class="sub-message">Que este nuevo año sea increíble ✨</div>
+  <a href="Declaracion.html" id="startButton">🎉 Presiona 🎉</a>
+
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎆</text></svg>">
+    <style>
+        /* Volvemos a la fuente original */
+        @import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap');
+
+        /* ===== MÓDULO DE COLORES ===== */
+        :root {
+            /* Colores del fondo - Noche azulada */
+            --bg-gradient-start: #020024; /* Azul muy oscuro casi negro */
+            --bg-gradient-middle: #090979; /* Azul noche profundo */
+            --bg-gradient-end: #00d4ff;    /* Este color se mezcla para dar el tono de horizonte, lo haremos más oscuro abajo */
+            
+            --text-color: #fff;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Amatic SC', cursive; /* Fuente original restaurada */
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            /* Degradado azul nocturno más realista */
+            background: linear-gradient(to bottom, #050714 0%, #0c1536 50%, #172a53 100%);
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .message-container {
+            position: absolute; /* Cambiar de relative a absolute */
+            top: 35%; /* Mientras menor el número, más arriba aparecerá (30-40% es ideal) */
+            left: 50%; /* Centrado horizontal */
+            transform: translate(-50%, -15%); /* Ajuste fino para centrarlo exacto */
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .message {
+            /* Antes: clamp(3rem, 6vw, 5.5rem) */
+            /* Ahora (Más grande): */
+            font-size: 150px; 
+            
+            font-weight: 700;
+            opacity: 0;
+            animation: textFadeIn 3s ease-out forwards;
+            text-shadow: 
+                0 0 10px rgba(255, 255, 255, 0.8),
+                0 0 20px rgba(255, 255, 255, 0.4);
+        }
+
+        @keyframes textFadeIn {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .click-instruction {
+            position: absolute;
+            bottom: 30px;
+            font-size: 1.5rem; /* Ajustado para la fuente Amatic */
+            opacity: 0.6;
+            z-index: 2;
+            animation: pulseText 2s infinite;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+
+
+            
+            .message {
+                font-size: 90px; /* Tamaño más pequeño para móviles */
+            }
+
+            #startButton {
+    position: absolute;
+    bottom: 25px;              /* Pegado abajo */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+
+    font-family: 'Amatic SC', cursive;
+    font-size: 2.2rem;
+    padding: 12px 30px;
+
+    color: #fff;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 40px;
+
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    animation: pulseButton 2s infinite;
+}
+
+#startButton:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+@keyframes pulseButton {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.08); }
+}
+
+/* Tamaño más cómodo en móviles */
+@media (max-width: 768px) {
+    #startButton {
+        font-size: 1.8rem;
+        padding: 10px 24px;
+    }
+}
+
+.sub-message {
+    font-size: 55px;              /* Solo más pequeño */
+    font-weight: inherit;
+    color: inherit;
+    opacity: 0;
+
+    animation: textFadeIn 3s ease-out forwards;
+    animation-delay: 1.2s;
+
+    text-shadow: inherit;         /* 🔥 MISMO BRILLO */
+}
+
+
+@media (max-width: 768px) {
+    .message {
+        font-size: 90px;
+    }
+
+    .sub-message {
+        font-size: 38px;
+    }
+}
+
+
+
+        
+    </style>
+</head>
+<body>
+    <canvas id="starrySky"></canvas>
+    
+    <div class="message-container">
+        <div class="message">¡Feliz 2026!</div>
+        <br>
+        <div class="sub-message">Te amo mucho conejita🐰 </div>
+        <div class="sub-message">Por mas años a tu lado </div>
+        <div class="sub-message"> ♥️</div>
+    </div>
+    
+
+    <script>
+        const canvas = document.getElementById('starrySky');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+
+        const stars = [];
+        const fireworks = [];
+        let lastFireworkTime = 0;
+        const fireworkCooldown = 150; 
+
+        // --- AUDIO (Mismo sistema) ---
+        let audio = null;
+        let audioContext = null;
+        let isAudioInitialized = false;
+        
+        function createAndPlayAudio() {
+            if (isAudioInitialized) return;
+            try {
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    audio = new Audio();
+                    audio.src = 'https://www.dl.dropboxusercontent.com/scl/fi/0lgxovpr1gutnet2prhe7/sound.mp3?rlkey=y3xpanfdepdvlvodt1b6h6w30&st=hgpdc9hu'; 
+                    audio.loop = true;
+                    audio.volume = 0.6;
+                }
+                if (audioContext && audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => { isAudioInitialized = true; })
+                        .catch((e) => {});
+                }
+            } catch (error) { console.log(error); }
+        }
+
+        function resumeAudio() {
+            if (audioContext && audioContext.state === 'suspended') audioContext.resume();
+            if (audio && audio.paused && isAudioInitialized) audio.play().catch(e => {});
+        }
+
+        // --- CLASES ---
+
+        class Star {
+            constructor() {
+                this.reset();
+                // Fase aleatoria para que no parpadeen todas igual
+                this.twinklePhase = Math.random() * Math.PI * 2; 
+                this.twinkleSpeed = Math.random() * 0.05 + 0.02;
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+
+                // Detectamos si es móvil (ancho menor a 768px)
+                const isMobile = window.innerWidth < 768;
+
+                if (isMobile) {
+                    // En móviles: estrellas mucho más pequeñas (entre 0.3px y 1.3px)
+                    this.size = Math.random() * 0.5 + 0.3; 
+                } else {
+                    // En PC: tamaño normal (entre 0.5px y 2.5px)
+                    this.size = Math.random() * 1.0 + 0.5; 
+                }
+
+                this.maxAlpha = Math.random() * 0.7 + 0.3;
+            }
+            update() {
+                // Efecto de parpadeo suave usando Seno
+                this.twinklePhase += this.twinkleSpeed;
+                // Math.sin va de -1 a 1, lo normalizamos para alpha
+                this.currentAlpha = this.maxAlpha * (Math.sin(this.twinklePhase) * 0.5 + 0.5);
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                // Color blanco ligeramente azulado para las estrellas
+                ctx.fillStyle = `rgba(220, 230, 255, ${this.currentAlpha})`;
+                ctx.fill();
+            }
+        }
+
+        class Firework {
+            constructor(x, y) {
+                this.x = x;
+                this.y = canvas.height;
+                this.targetX = x;
+                this.targetY = y;
+                this.speed = Math.random() * 3 + 10;
+                this.exploded = false;
+                this.particles = [];
+                this.color = this.getRandomColor();
+            }
+
+            getRandomColor() {
+                // Paleta de colores ampliada
+                const colors = [
+                    [255, 215, 0],   // Dorado
+                    [255, 255, 255], // Blanco brillante
+                    [255, 50, 50],   // Rojo intenso
+                    [50, 150, 255],  // Azul cielo
+                    [255, 0, 255],   // Magenta neón
+                    [0, 255, 255],   // Turquesa / Cian
+                    [255, 140, 0],   // Naranja fuego
+                    [124, 252, 0],   // Verde lima
+                    [186, 85, 211]   // Orquídea medio
+                ];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            update() {
+                if (!this.exploded) {
+                    const dy = this.targetY - this.y;
+                    this.y += dy * 0.06; 
+                    this.x += (this.targetX - this.x) * 0.06;
+                    
+                    if (Math.abs(dy) < 10) {
+                        this.explode();
+                    }
+                } else {
+                    for (let i = this.particles.length - 1; i >= 0; i--) {
+                        this.particles[i].update();
+                        if (this.particles[i].life <= 0) {
+                            this.particles.splice(i, 1);
+                        }
+                    }
+                }
+            }
+
+            explode() {
+                this.exploded = true;
+                const particleCount = 150; // Más partículas
+                for (let i = 0; i < particleCount; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const velocity = Math.random() * 5 + 1;
+                    this.particles.push(new Particle(this.x, this.y, Math.cos(angle) * velocity, Math.sin(angle) * velocity, this.color));
+                }
+            }
+
+            draw() {
+                if (!this.exploded) {
+                    // Cohete subiendo
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgb(${this.color[0]}, ${this.color[1]}, ${this.color[2]})`;
+                    ctx.fill();
+                } else {
+                    this.particles.forEach(p => p.draw());
+                }
+            }
+        }
+
+        class Particle {
+            constructor(x, y, vx, vy, color) {
+                this.x = x;
+                this.y = y;
+                this.vx = vx;
+                this.vy = vy;
+                this.color = color;
+                this.life = 1;
+                // Decay MUY bajo para que duren mucho más
+                this.decay = Math.random() * 0.005 + 0.004; 
+                this.gravity = 0.04; // Gravedad ligera
+            }
+
+            update() {
+                this.vx *= 0.95; 
+                this.vy *= 0.95;
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= this.decay;
+            }
+
+            draw() {
+                ctx.beginPath();
+                // Dibujar una línea (rastro) en lugar de solo un punto
+                ctx.moveTo(this.x - this.vx * 3, this.y - this.vy * 3);
+                ctx.lineTo(this.x, this.y);
+                
+                // Efecto de parpadeo final cuando están por desaparecer
+                let alpha = this.life;
+                if (this.life < 0.3) {
+                    alpha = Math.random() > 0.5 ? this.life : 0; 
+                }
+
+                ctx.strokeStyle = `rgba(${this.color[0]}, ${this.color[1]}, ${this.color[2]}, ${alpha})`;
+                ctx.lineWidth = 2;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+        }
+
+        // Inicializar muchas estrellas
+        for (let i = 0; i < 450; i++) {
+            stars.push(new Star());
+        }
+
+        function handleInteraction(e) {
+            createAndPlayAudio();
+            resumeAudio();
+            
+            const currentTime = Date.now();
+            if (currentTime - lastFireworkTime > fireworkCooldown) {
+                let x, y;
+                if(e.type === 'touchstart') {
+                    x = e.touches[0].clientX;
+                    y = e.touches[0].clientY;
+                } else {
+                    x = e.clientX;
+                    y = e.clientY;
+                }
+                fireworks.push(new Firework(x, y));
+                lastFireworkTime = currentTime;
+            }
+        }
+
+        document.addEventListener('click', handleInteraction);
+        document.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleInteraction(e);
+        }, {passive: false});
+
+        function animate() {
+            // Limpiamos el canvas pero con un color azul oscuro muy transparente
+            // Esto crea el rastro (trail) en los fuegos artificiales pero mantiene el fondo azulado
+            ctx.fillStyle = 'rgba(5, 7, 20, 0.2)'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Dibujar estrellas
+            ctx.globalCompositeOperation = 'lighter'; // Hace que las estrellas brillen más
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+
+            // Dibujar fuegos artificiales
+            for (let i = fireworks.length - 1; i >= 0; i--) {
+                fireworks[i].update();
+                fireworks[i].draw();
+                if (fireworks[i].exploded && fireworks[i].particles.length === 0) {
+                    fireworks.splice(i, 1);
+                }
+            }
+            
+            ctx.globalCompositeOperation = 'source-over';
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            // Reiniciar estrellas al cambiar tamaño
+            stars.length = 0;
+            for (let i = 0; i < 450; i++) stars.push(new Star());
+        });
+        
+        animate();
+    </script>
+</body>
+</html>
