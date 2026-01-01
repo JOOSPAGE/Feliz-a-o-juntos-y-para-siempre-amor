@@ -404,9 +404,10 @@
 
         document.addEventListener('click', handleInteraction);
         document.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            handleInteraction(e);
-        }, {passive: false});
+    if (e.target.id === 'startButton') return; // 👈 deja pasar el botón
+    handleInteraction(e);
+}, { passive: true });
+
 
         function animate() {
             // Limpiamos el canvas pero con un color azul oscuro muy transparente
@@ -446,5 +447,6 @@
 </body>
 
 </html>
+
 
 
